@@ -1,8 +1,8 @@
 
 resource "aws_sns_topic" "demo" {
-  name              = var.name
+  name              = "sentinel"
   kms_master_key_id = "alias/aws/sns"
-  tags              = var.tags
+  #tags              = var.tags
 }
 
 resource "aws_sns_topic_subscription" "sns-topic" {
