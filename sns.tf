@@ -5,7 +5,3 @@ resource "aws_sns_topic" "demo" {
   #tags              = var.tags
 }
 
-resource "aws_sns_topic_subscription" "sns-topic" {
-  topic_arn = aws_sns_topic.demo.arn
-  protocol  = "email"
-}
