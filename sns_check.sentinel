@@ -1,21 +1,30 @@
 
 import "tfplan/v2" as tfplan
+import "tfstate/v2" as tfstate
 
-//find all aws_sns_topic that will be created/updated and don't have encryption enabled
-violatingSNS = filter tfplan.resource_changes as _, rc {
-	rc.type is "aws_sns_topic" and
-		rc.mode is "managed" and
-		(rc.change.actions contains "create" or rc.change.actions contains "update") and
-		(rc.change.after not contains "kms_master_key_id" or
-			length(rc.change.after.kms_master_key_id) == 0)
+#param aws_account_id default  [955766821354, 3064333]
+current_aws_id=tfstate.outputs.account_id.value 
+
+sns = filter tfplan.resource_changes as address, rc {
+  rc.type is "aws_sns_topic" and
+  rc.mode is "managed" and
+  (rc.change.actions contains "create" or rc.change.actions contains "update" or
+   rc.change.actions contains "read" or rc.change.actions contains "no-op")  
 }
-
-for violatingSNS as address, topic{
-	print(address + " does not have encryption configured.")
+print("length sns ",length(sns)) 
+print("account check",current_aws_id in aws_account_id)
+ 
+# Count violations
+violations=0
+for aws_account_id as allowed_id {
+    print(" id check",(current_aws_id != allowed_id) ,"current_aws_id",current_aws_id,"allowed_id ", allowed_id)
+    print(" length check", (length(sns) > 0 ) , length(sns))
+    if((current_aws_id != allowed_id) and (length(sns) > 0 )) {
+        violations +=1
+        print("Violation: Account Id - ", current_aws_id ," not allowed to create sns")
+    }
 }
-
-// debug code
 
 main = rule {
-	length(violatingSNS) == 0
+    violations <= 0 
 }
