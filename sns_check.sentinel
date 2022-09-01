@@ -2,7 +2,7 @@
 import "tfplan/v2" as tfplan
 import "tfstate/v2" as tfstate
 
-#param aws_account_id default  [955766821354, 3064333]
+#param aws_account_id default  
 current_aws_id= tfstate.outputs.account_id.value
 print("current_aws_id")
 
