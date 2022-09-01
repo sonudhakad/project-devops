@@ -3,7 +3,7 @@ import "tfplan/v2" as tfplan
 import "tfstate/v2" as tfstate
 
 #param aws_account_id default  
-current_aws_id= tfstate.outputs.account_id.value
+current_aws_id= 550628734759
 print("current_aws_id")
 
 sns = filter tfplan.resource_changes as address, rc {
