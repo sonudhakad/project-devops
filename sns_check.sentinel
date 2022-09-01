@@ -17,7 +17,7 @@ print("account check",current_aws_id in aws_account_id)
  
 # Count violations
 violations=0
-for aws_account_id as allowed_id {
+for current_aws_id as allowed_id {
     print(" id check",(current_aws_id != allowed_id) ,"current_aws_id",current_aws_id,"allowed_id ", allowed_id)
     print(" length check", (length(sns) > 0 ) , length(sns))
     if((current_aws_id != allowed_id) and (length(sns) > 0 )) {
